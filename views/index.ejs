@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<!--<a target="_blank" href="https://icons8.com/icon/YYvuiXp7wbiJ/feather-client">Feather Client</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client Tracker</title>
+    <link rel="stylesheet" href="./styles.css" />
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="./img/icons8-feather-client-500.png"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <!----- Header ----->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <img src="./img/icons8-feather-client-500.png" alt="logo-img" />
+          <a href="#">Clients</a>
+        </div>
+
+        <div class="add-client">
+          <button type="button" class="btn" id="add-client-btn">
+            Add Client
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!----- Client Modal ----->
+    <div class="modal-container" id="modal-container">
+      <div class="client-modal">
+        <i class="fa-solid fa-xmark" id="close-icon"></i>
+        <h2>Client Details</h2>
+
+        <form action="/addClient" method="post" id="form">
+          <input type="text" placeholder="Name" name="clientName" />
+          <input type="email" placeholder="Email" name="clientEmail" />
+          <input type="text" placeholder="Job" name="clientJob" />
+          <input type="number" placeholder="Rate" name="clientRate" />
+          <button type="submit" class="btn">Add Client</button>
+        </form>
+      </div>
+    </div>
+
+    <!----- Client Table Section ----->
+    <section class="client-info">
+      <div class="container">
+        <table class="client-table">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Job</th>
+              <th>Rate</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% for(let i = 0; i < info.length; i++) { %>
+            <!-- creating table rows dynamically -->
+            <tr>
+              <td><%= info[i].id %></td>
+              <td><%= info[i].name %></td>
+              <td><%= info[i].email %></td>
+              <td><%= info[i].job %></td>
+              <td><%= info[i].rate %></td>
+              <td>
+                <button type="button" class="btn" id="update-btn">
+                  Update
+                </button>
+              </td>
+              <td>
+                <button type="button" class="btn" id="delete-btn">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
