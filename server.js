@@ -76,4 +76,15 @@ app.post("/addClient", async (request, response) => {
   }
 });
 
+app.delete("/deleteClient", (request, response) => {
+  // console.log(request.body);
+  db.collection("clients")
+    .deleteOne({ id: request.body.id })
+    .then((result) => {
+      console.log("client deleted");
+      response.json("client deleted");
+    })
+    .catch((error) => console.error(error));
+});
+
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}`));

@@ -94,6 +94,7 @@ header .add-client .btn {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  z-index: 100;
 }
 
 .modal-container.show {
