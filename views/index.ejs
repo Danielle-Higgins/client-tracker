@@ -42,18 +42,57 @@
       </div>
     </header>
 
-    <!----- Client Modal ----->
+    <!----- Add Client Modal ----->
     <div class="modal-container" id="modal-container">
       <div class="client-modal">
         <i class="fa-solid fa-xmark" id="close-icon"></i>
         <h2>Client Details</h2>
 
-        <form action="/addClient" method="post" id="form">
+        <form action="/addClient" method="post" id="add-form">
           <input type="text" placeholder="Name" name="clientName" />
           <input type="email" placeholder="Email" name="clientEmail" />
           <input type="text" placeholder="Job" name="clientJob" />
           <input type="number" placeholder="Rate" name="clientRate" />
           <button type="submit" class="btn">Add Client</button>
+        </form>
+      </div>
+    </div>
+
+    <!----- Update Client Modal ----->
+    <div class="modal-container" id="update-modal">
+      <div class="client-modal">
+        <i class="fa-solid fa-xmark" id="close-update-icon"></i>
+        <h2>Update Client Details</h2>
+
+        <form id="update-form">
+          <input type="hidden" name="clientId" id="update-client-id" />
+          <input
+            type="text"
+            placeholder="Name"
+            name="clientName"
+            id="update-client-name"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            name="clientEmail"
+            id="update-client-email"
+          />
+          <input
+            type="text"
+            placeholder="Job"
+            name="clientJob"
+            id="update-client-job"
+          />
+          <input
+            type="number"
+            placeholder="Rate"
+            name="clientRate"
+            id="update-client-rate"
+          />
+          <button type="button" class="btn" id="update-client-btn">
+            Update Client
+          </button>
         </form>
       </div>
     </div>

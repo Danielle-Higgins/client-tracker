@@ -76,6 +76,7 @@ app.post("/addClient", async (request, response) => {
   }
 });
 
+// handle delete request from delete button click
 app.delete("/deleteClient", (request, response) => {
   // console.log(request.body);
   db.collection("clients")
@@ -83,6 +84,28 @@ app.delete("/deleteClient", (request, response) => {
     .then((result) => {
       console.log("client deleted");
       response.json("client deleted");
+    })
+    .catch((error) => console.error(error));
+});
+
+// handle put request from update button click
+app.put("/updateClient", (request, response) => {
+  // console.log(request.body);
+  db.collection("clients")
+    .updateOne(
+      { id: request.body.id }, // find the match
+      {
+        $set: {
+          name: request.body.clientName,
+          email: request.body.clientEmail,
+          job: request.body.clientJob,
+          rate: request.body.clientRate,
+        },
+      }
+    )
+    .then((result) => {
+      console.log("updated client");
+      response.json("updated client");
     })
     .catch((error) => console.error(error));
 });

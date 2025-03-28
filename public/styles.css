@@ -112,7 +112,8 @@ header .add-client .btn {
   position: relative;
 }
 
-.client-modal #close-icon {
+.client-modal #close-icon,
+.client-modal #close-update-icon {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -121,7 +122,8 @@ header .add-client .btn {
   transition: 0.3s;
 }
 
-.client-modal #close-icon:hover {
+.client-modal #close-icon:hover,
+.client-modal #close-update-icon:hover {
   transform: scale(1.1);
 }
 
