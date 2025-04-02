@@ -37,6 +37,8 @@ img {
   max-width: 100%;
 }
 
+/* ------------------------------- MAIN PAGE ------------------------------- */
+
 /* ----- Header Styles ----- */
 .header {
   width: 100%;
@@ -206,6 +208,98 @@ header .add-client .btn {
 .client-table #delete-btn {
   background-color: rgb(209, 118, 170);
   font-weight: 600;
+}
+
+/* ------------------------------- REGISTER/LOGIN PAGE ------------------------------- */
+.signup-container,
+.login-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.signup-container .signup,
+.login-container .login {
+  max-width: 100%;
+  width: 450px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  color: var(--background-color);
+  padding: 50px 30px 70px;
+  text-align: center;
+}
+
+.signup h2,
+.login h2 {
+  font-size: 3rem;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.signup h2::after,
+.login h2::after {
+  content: "";
+  width: 30px;
+  height: 4px;
+  border-radius: 3px;
+  background-color: var(--background-color);
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.signup form .input-group,
+.login form .input-group {
+  background-color: #eaeaea;
+  margin: 20px 0;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.signup form .input-group input,
+.login form .input-group input {
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  padding: 18px 15px;
+  color: var(--background-color);
+  font-size: 1.6rem;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+
+.signup form .input-group input::placeholder,
+.login form .input-group input::placeholder {
+  color: var(--background-color);
+}
+
+.signup form .input-group i,
+.login form .input-group i {
+  margin-left: 15px;
+  color: var(--background-color);
+}
+
+.btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.btn-container > * {
+  flex-basis: 48%;
+  color: #fff;
+  background-color: var(--background-color);
+  font-size: 1.6rem;
+}
+
+.btn-container .btn {
+  border-radius: 20px;
 }
 
 /* ----- Utility Classes ----- */

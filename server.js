@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8000;
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
 
-// were using ejs as out template
+// were using ejs as our template
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(cors());
@@ -52,6 +52,14 @@ app.get("/", (request, response) => {
       response.render("index.ejs", { info: data });
     })
     .catch((error) => console.error(error));
+});
+
+app.get("/login", (request, response) => {
+  response.render("login.ejs");
+});
+
+app.get("/register", (request, response) => {
+  response.render("register.ejs");
 });
 
 // handle post request from form
