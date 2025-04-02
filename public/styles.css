@@ -230,11 +230,13 @@ header .add-client .btn {
   color: var(--background-color);
   padding: 50px 30px 70px;
   text-align: center;
+  border-radius: 10px;
 }
 
 .signup h2,
 .login h2 {
   font-size: 3rem;
+  font-weight: 700;
   margin-bottom: 60px;
   position: relative;
 }
@@ -296,10 +298,19 @@ header .add-client .btn {
   color: #fff;
   background-color: var(--background-color);
   font-size: 1.6rem;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+  font-weight: 500;
 }
 
 .btn-container .btn {
   border-radius: 20px;
+  transition: 0.5s;
+}
+
+.btn-container .btn:hover {
+  border: 2px solid var(--background-color);
+  color: var(--background-color);
+  background-color: #fff;
 }
 
 /* ----- Utility Classes ----- */

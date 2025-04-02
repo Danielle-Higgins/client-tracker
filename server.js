@@ -8,6 +8,10 @@ const PORT = process.env.PORT || 8000;
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
 
+// password hashing and hash comparison
+// commonly used for securely storing passwords in databases
+const bcrypt = require("bcrypt");
+
 // were using ejs as our template
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -42,6 +46,14 @@ function generateId() {
     });
 }
 
+app.get("/login", (request, response) => {
+  response.render("login.ejs");
+});
+
+app.get("/register", (request, response) => {
+  response.render("register.ejs");
+});
+
 // handle get requests from the main route
 app.get("/", (request, response) => {
   db.collection("clients")
@@ -54,12 +66,23 @@ app.get("/", (request, response) => {
     .catch((error) => console.error(error));
 });
 
-app.get("/login", (request, response) => {
-  response.render("login.ejs");
-});
+app.post("/login", (request, response) => {});
 
-app.get("/register", (request, response) => {
-  response.render("register.ejs");
+app.post("/register", async (request, response) => {
+  // create new user with correct hashed password
+  try {
+    // hash the password which we can store in db
+    const hashedPassword = await bcrypt.hash(request.body.password, 10);
+    await db.collection("users").insertOne({
+      name: request.body.name,
+      email: request.body.email,
+      password: hashedPassword,
+    });
+    response.redirect("/login");
+  } catch (error) {
+    console.error(error);
+    response.redirect("/register");
+  }
 });
 
 // handle post request from form
