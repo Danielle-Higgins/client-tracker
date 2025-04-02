@@ -1,4 +1,3 @@
-// importing express and cors
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -12,6 +11,19 @@ require("dotenv").config();
 // commonly used for securely storing passwords in databases
 const bcrypt = require("bcrypt");
 
+// authentication middleware
+const passport = require("passport");
+const flash = require("express-flash");
+const session = require("express-session");
+
+// configure Passport in your server.js and provide the helper functions for retrieving users from your database.
+const initializePassport = require("./passport-config");
+initializePassport(
+  passport,
+  async (email) => await db.collection("users").findOne({ email }),
+  async (id) => await db.collection("users").findOne({ _id: id })
+);
+
 // were using ejs as our template
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -21,17 +33,26 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(flash());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+); // manage user sessions
+app.use(passport.initialize()); // setup Passport
+app.use(passport.session()); // store variables to be persisted across the session
+
 let db,
   dbConnectionStr = process.env.DB_STRING,
   dbName = "client-tracker";
 
 // this connects to our db
-MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true }).then(
-  (client) => {
-    console.log(`Connected to ${dbName} Database`);
-    db = client.db(dbName);
-  }
-);
+MongoClient.connect(dbConnectionStr).then((client) => {
+  console.log(`Connected to ${dbName} Database`);
+  db = client.db(dbName);
+});
 
 // generate id for the clients (returns a promise)
 function generateId() {
@@ -46,18 +67,34 @@ function generateId() {
     });
 }
 
-app.get("/login", (request, response) => {
+// Ensure users can only access certain pages (like /) if they're logged in
+function checkAuthenticated(request, response, next) {
+  // check if there's a user thats authenticated
+  if (request.isAuthenticated()) {
+    return next();
+  }
+  response.redirect("/login");
+}
+
+function checkNotAuthenticated(request, response, next) {
+  if (request.isAuthenticated()) {
+    return response.redirect("/");
+  }
+  next();
+}
+
+app.get("/login", checkNotAuthenticated, (request, response) => {
   response.render("login.ejs");
 });
 
-app.get("/register", (request, response) => {
+app.get("/register", checkNotAuthenticated, (request, response) => {
   response.render("register.ejs");
 });
 
 // handle get requests from the main route
-app.get("/", (request, response) => {
+app.get("/", checkAuthenticated, (request, response) => {
   db.collection("clients")
-    .find({}, { projection: { _id: 0 } })
+    .find({ userId: request.user._id })
     .toArray()
     .then((data) => {
       // console.log(data);
@@ -66,9 +103,29 @@ app.get("/", (request, response) => {
     .catch((error) => console.error(error));
 });
 
-app.post("/login", (request, response) => {});
+// /login post route to authenticate users using Passport
+app.post("/login", checkNotAuthenticated, (request, response, next) => {
+  passport.authenticate("local", (error, user, info) => {
+    if (error) {
+      // console.error("Authentication error:", error);
+      return next(error);
+    }
+    if (!user) {
+      // console.log("Login failed:", info.message);
+      return response.redirect("/login");
+    }
+    request.logIn(user, (error) => {
+      if (error) {
+        // console.error("Error during login:", error);
+        return next(error);
+      }
+      // console.log("User successfully logged in:", user);
+      return response.redirect("/");
+    });
+  })(request, response, next);
+});
 
-app.post("/register", async (request, response) => {
+app.post("/register", checkNotAuthenticated, async (request, response) => {
   // create new user with correct hashed password
   try {
     // hash the password which we can store in db
@@ -85,6 +142,16 @@ app.post("/register", async (request, response) => {
   }
 });
 
+app.post("/logout", (request, response) => {
+  request.logOut((error) => {
+    if (error) {
+      console.error("Error during logout:", error);
+      return response.status(500).send("Logout failed");
+    }
+    response.redirect("/login");
+  });
+});
+
 // handle post request from form
 app.post("/addClient", async (request, response) => {
   // console.log(request.body);
@@ -98,6 +165,7 @@ app.post("/addClient", async (request, response) => {
       email: request.body.clientEmail,
       job: request.body.clientJob,
       rate: request.body.clientRate,
+      userId: request.user._id, // Link to logged-in user
     });
     console.log("client added");
     response.redirect("/"); // refreshing the page (get request)

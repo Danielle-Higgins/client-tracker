@@ -65,6 +65,7 @@ img {
 
 .header .logo:hover,
 header .add-client .btn:hover,
+header form .btn:hover,
 .client-modal form .btn:hover,
 .client-table .btn:hover {
   transform: scale(1.05);
@@ -74,11 +75,16 @@ header .add-client .btn:hover,
   width: 50px;
 }
 
-header .add-client .btn {
+header .add-client .btn,
+header form .btn {
   background-color: rgb(105, 195, 244);
   color: #000;
   padding: 12px 15px;
   font-weight: 600;
+}
+
+header form .btn {
+  background-color: #0096c7;
 }
 
 /* ----- Modal Styles ----- */
@@ -329,4 +335,5 @@ header .add-client .btn {
   border-radius: 5px;
   cursor: pointer;
   transition: 0.3s;
+  font-size: 1.4rem;
 }
