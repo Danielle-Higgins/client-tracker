@@ -260,11 +260,20 @@ header form .btn {
   transform: translateX(-50%);
 }
 
+.login .flash-error {
+  color: red;
+  background-color: #fdd;
+  border: 1px solid red;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
 .signup form .input-group,
 .login form .input-group {
   background-color: #eaeaea;
   margin: 20px 0;
-  border-radius: 3px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
 }

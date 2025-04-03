@@ -94,7 +94,8 @@ function checkNotAuthenticated(request, response, next) {
 }
 
 app.get("/login", checkNotAuthenticated, (request, response) => {
-  response.render("login.ejs");
+  // This passes the flash messages to the EJS template under the messages variable.
+  response.render("login.ejs", { messages: request.flash() });
 });
 
 app.get("/register", checkNotAuthenticated, (request, response) => {
@@ -114,33 +115,15 @@ app.get("/", checkAuthenticated, (request, response) => {
 });
 
 // /login post route to authenticate users using Passport
-app.post("/login", checkNotAuthenticated, (request, response, next) => {
-  // Uses the LocalStrategy to authenticate the user
-  passport.authenticate("local", (error, user, info) => {
-    // Handle any errors
-    if (error) {
-      // console.error("Authentication error:", error);
-      return next(error);
-    }
-    // Redirect if login failed (If authentication fails)
-    if (!user) {
-      // console.log("Login failed:", info.message);
-      return response.redirect("/login");
-    }
-
-    // If authentication succeeds
-    // establishes the session and stores the user ID in req.session
-    request.logIn(user, (error) => {
-      // Handle login errors
-      if (error) {
-        // console.error("Error during login:", error);
-        return next(error);
-      }
-      // console.log("User successfully logged in:", user);
-      return response.redirect("/");
-    });
-  })(request, response, next);
-});
+app.post(
+  "/login",
+  checkNotAuthenticated,
+  passport.authenticate("local", {
+    successRedirect: "/", // Redirect to the main page on success
+    failureRedirect: "/login", // Redirect back to the login page on failure
+    failureFlash: true, // Enable flash messages for failed logins
+  })
+);
 
 app.post("/register", checkNotAuthenticated, async (request, response) => {
   // create new user with correct hashed password

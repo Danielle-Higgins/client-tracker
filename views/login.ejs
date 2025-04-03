@@ -27,6 +27,14 @@
       <div class="login">
         <h2>Login</h2>
 
+        <% if (messages.error && messages.error.length > 0) { %>
+        <div class="flash-error">
+          <% messages.error.forEach(function(message) { %>
+          <p><%= message %></p>
+          <% }) %>
+        </div>
+        <% } %>
+
         <form action="/login" method="post" id="login-form">
           <div class="input-group">
             <i class="fa-solid fa-envelope"></i>
