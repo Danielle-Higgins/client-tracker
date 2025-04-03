@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const PORT = process.env.PORT || 8000;
+const port = process.env.PORT || 8000;
 
 // importing mongodb (setting up to talk to our db)
 const MongoClient = require("mongodb").MongoClient;
@@ -217,4 +217,4 @@ Why This Works Together
 3. Route Protection: Middleware like checkAuthenticated ensures only logged-in users access protected routes.
 */
 
-app.listen(PORT, () => console.log(`server is listening on port ${PORT}`));
+app.listen(port, () => console.log(`server is listening on port ${port}`));
