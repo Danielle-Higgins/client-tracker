@@ -84,7 +84,7 @@ header form .btn {
 }
 
 header form .btn {
-  background-color: #0096c7;
+  background-color: #a2d2ff;
 }
 
 /* ----- Modal Styles ----- */
@@ -166,7 +166,16 @@ header form .btn {
 
 /* ----- Client Info Section ----- */
 .client-info {
-  padding: 60px 20px 90px;
+  padding: 25px 20px 90px;
+}
+
+.client-info h1 {
+  max-width: 1500px;
+  margin: auto;
+  margin-bottom: 20px;
+  font-size: 4rem;
+  font-weight: 600;
+  color: #a2d2ff;
 }
 
 .client-info .container {

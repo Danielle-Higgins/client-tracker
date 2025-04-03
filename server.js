@@ -109,7 +109,7 @@ app.get("/", checkAuthenticated, (request, response) => {
     .toArray()
     .then((data) => {
       // console.log(data);
-      response.render("index.ejs", { info: data });
+      response.render("index.ejs", { info: data, name: request.user.name });
     })
     .catch((error) => console.error(error));
 });
