@@ -11,17 +11,20 @@ require("dotenv").config();
 // commonly used for securely storing passwords in databases
 const bcrypt = require("bcrypt");
 
-// authentication middleware
-const passport = require("passport");
+// step 1. Passport Setup
+const passport = require("passport"); // The main middleware for authentication.
+// Enables flash messages for showing errors (e.g., invalid login attempts)
 const flash = require("express-flash");
+// Manages sessions to persist user login state across requests
 const session = require("express-session");
 
+// step 2. Passport Initialization
 // configure Passport in your server.js and provide the helper functions for retrieving users from your database.
 const initializePassport = require("./passport-config");
 initializePassport(
   passport,
-  async (email) => await db.collection("users").findOne({ email }),
-  async (id) => await db.collection("users").findOne({ _id: id })
+  async (email) => await db.collection("users").findOne({ email }), // Fetch user by email
+  async (id) => await db.collection("users").findOne({ _id: id }) // Fetch user by ID
 );
 
 // were using ejs as our template
@@ -33,15 +36,22 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(flash());
+app.use(flash()); // using flash
+
+// step 3. Session Setup
+// This sets up Express sessions, necessary for Passport to store authenticated user data.
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
+    secret: process.env.SESSION_SECRET, // Used to sign and encrypt the session cookie
+    resave: false, // Prevents resaving session if unchanged
+    saveUninitialized: false, // Prevents saving empty sessions
   })
 ); // manage user sessions
-app.use(passport.initialize()); // setup Passport
+
+// step 4. Passport Middleware
+// Activates Passport for your app
+app.use(passport.initialize()); // Initialize Passport middleware
+// Enables Passport to store and retrieve user data across requests
 app.use(passport.session()); // store variables to be persisted across the session
 
 let db,
@@ -105,16 +115,23 @@ app.get("/", checkAuthenticated, (request, response) => {
 
 // /login post route to authenticate users using Passport
 app.post("/login", checkNotAuthenticated, (request, response, next) => {
+  // Uses the LocalStrategy to authenticate the user
   passport.authenticate("local", (error, user, info) => {
+    // Handle any errors
     if (error) {
       // console.error("Authentication error:", error);
       return next(error);
     }
+    // Redirect if login failed (If authentication fails)
     if (!user) {
       // console.log("Login failed:", info.message);
       return response.redirect("/login");
     }
+
+    // If authentication succeeds
+    // establishes the session and stores the user ID in req.session
     request.logIn(user, (error) => {
+      // Handle login errors
       if (error) {
         // console.error("Error during login:", error);
         return next(error);
@@ -143,6 +160,7 @@ app.post("/register", checkNotAuthenticated, async (request, response) => {
 });
 
 app.post("/logout", (request, response) => {
+  // clears the user’s session and removes their authentication state
   request.logOut((error) => {
     if (error) {
       console.error("Error during logout:", error);
@@ -208,5 +226,12 @@ app.put("/updateClient", (request, response) => {
     })
     .catch((error) => console.error(error));
 });
+
+/*
+Why This Works Together
+1. Authentication: The LocalStrategy validates users.
+2. Session Management: The user’s _id is stored in the session, enabling persistence.
+3. Route Protection: Middleware like checkAuthenticated ensures only logged-in users access protected routes.
+*/
 
 app.listen(PORT, () => console.log(`server is listening on port ${PORT}`));
