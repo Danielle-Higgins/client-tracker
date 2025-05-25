@@ -24,7 +24,10 @@ Are you a freelancer and need to keep track of your clients? Then say hello to C
 
 This project is built using Node.js with the Express.js framework. It also uses Passport/Passport Local for user authentication, bcrypt for password hashing, along with express sessions and flash to flash error messages for incorrect logins. All of the users data along with their associated clients will be stored in a MongoDB database. First the user will need to sign up entering their name, email, and password. They will be redirected to the login page where they will login using the email and password they signed up with. Then they will be taken to the main page, that being the Client Tracker page. On that page, the user will be able to add clients to the client list as well as update their clients information and/or delete them from the list. This is a website useful for keeping track of clients for freelancers.
 
-If you want to try this proejct out use: email: terra@example.com, password: hi
+## If you want to try this proejct out
+Email: terra@example.com
+<br>
+Password: hi
 
 ## Optimizations
 
